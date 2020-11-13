@@ -5,8 +5,11 @@ import Header from './components/Header/Header';
 import Cards from './components/Card/Cards';
 import Map from './components/Map/Map';
 import Chart from './components/Chart/Chart';
-import Graph from './components/Graph/Graph'
+import Graph from './components/Graph/Graph';
+import {sortData} from './components/util';
 
+
+import { Card, CardContent, Typography } from "@material-ui/core";
 
 
 function App() {
@@ -17,6 +20,9 @@ function App() {
   const[country, setCountry] = useState('Worldwide');
   // info for the cards
   const[countryInfo, setCountryInfo] = useState({})
+
+  // for the chart
+  const[tableData, setTableData] = useState([]);
 
   // for the dropdown menu which will fetch all the countries
   useEffect( () => {
@@ -29,6 +35,9 @@ function App() {
           value:country.countryInfo.iso2,
 
           }));
+
+          const sortedData = sortData(data);
+          setTableData(sortedData);
           setCountries(countries);
       });
       };
@@ -63,7 +72,8 @@ const onCountrySelect = async (event) => {
     });
 }
 
-console.log(countryInfo)
+
+console.log(countries)
 
 
  
@@ -94,8 +104,16 @@ console.log(countryInfo)
       </div>
 
       <div className="appRight">
-        <Chart/>
-        <Graph/>
+        <Card>
+          <CardContent>
+            <div className="appRightContents">
+              <Chart countries={tableData} />
+              <Graph/>
+            </div>
+
+          </CardContent>
+        </Card>
+        
       </div>
 
 

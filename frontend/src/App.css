@@ -1,5 +1,6 @@
 * {
   margin: 0;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 body {
@@ -19,7 +20,7 @@ body {
 }
 
 .appLeft {
-  flex: 0.8;
+  flex: 0.85;
 }
 
 .Cards {

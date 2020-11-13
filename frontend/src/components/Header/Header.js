@@ -10,48 +10,21 @@ import './Header.css'
 
 
 
-function Header(){
-    const[countries, setCountries] = useState([]);
-    const[country, setCountry] = useState('Worldwide');
-
-    useEffect( () => {
-        const getCountriesData = async () => {
-        await fetch("https://disease.sh/v3/covid-19/countries")
-        .then((response) => response.json())
-        .then((data) => {
-            const countries = data.map((country) => ({
-            name: country.country,
-            value:country.countryInfo.iso2,
-
-            }));
-            setCountries(countries);
-        });
-        };
-        getCountriesData();
-    }, []);
-
-  function onCountrySelect(event) {
-    const countryCode = event.target.value;
-
-    setCountry(countryCode);
-  }
-
-   
+function Header(props){
     return(
         <div className="appHeader">
             <h1>Covid-19 Tracker</h1>
 
             <FormControl className="appDropdown">
-
-                <Select variant="outlined" onChange={onCountrySelect} value={country}>
+                <Select variant="outlined" onChange={props.onCountrySelect} value={props.country}>
                     
                     <MenuItem value="Worldwide">Worldwide</MenuItem>
-                    {countries.map((country) => (
-                    <MenuItem value={country.value}>{country.name}</MenuItem>
+                    {props.countries.map((country) => (
+                    <MenuItem value={country.value}> {country.name} </MenuItem>
                     ))}
                 </Select>
             </FormControl>
-      </div>
+        </div>
     )
 }
 

@@ -2,3 +2,28 @@
   margin: 0;
 }
 
+body {
+  background-color: beige;
+}
+
+.app {
+  display: flex;
+  justify-content: space-between;
+  padding:2%;
+}
+
+@media (max-width: 720px) {
+  .app {
+    flex-direction: column;
+  }
+}
+
+.appLeft {
+  flex: 0.8;
+}
+
+.Cards {
+  display: flex;
+  justify-content: space-between;
+
+}

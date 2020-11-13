@@ -108,7 +108,7 @@ console.log(countries)
           <CardContent>
             <div className="appRightContents">
               <Chart countries={tableData} />
-              <Graph/>
+              <Graph casesType="recovered"/>
             </div>
 
           </CardContent>

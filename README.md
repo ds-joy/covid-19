@@ -1,5 +1,5 @@
 # covid-19 Update
-#### This web application is a covid-19 update dash board. Live demo can be found here. 
+#### This web application is a covid-19 update dash board. Live demo can be found [here](https://ds-joy.github.io/covid-19/). 
 
 
 ## Features:

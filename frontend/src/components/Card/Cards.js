@@ -6,13 +6,17 @@ import "./Card.css";
 function Cards(props) {
     return (
         <div className="infoBox">
-            <Card>
+            <Card
+                onClick={props.onClick}
+            className={`infoBox ${props.active && "infoBox--selected"} ${
+                props.isRed && "infoBox--red"
+            }`}>
                 <CardContent>
-                    <Typography className="title" color="textSecondary"> {props.title}</Typography>
+                    <Typography className="title" color="textSecondary" gutterBottom> {props.title}</Typography>
 
-                    <h2>{props.cases}</h2>
+                    <h2 className={`infoBox__cases ${!props.isRed && "infoBox__cases--green"}`}>{props.cases}</h2>
 
-    <Typography className="title" color="textSecondary">{props.total}</Typography>
+                <Typography className="infoBox__total" color="textSecondary">{props.total} Total</Typography>
 
                     
                 </CardContent>

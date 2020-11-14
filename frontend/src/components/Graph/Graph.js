@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import numeral from "numeral";
+import './Graph.css'
 
 const options = {
   legend: {
@@ -84,7 +85,7 @@ function Graph({ casesType }) {
   }, [casesType]);
 
   return (
-    <div>
+    <div className="graph">
       {data?.length > 0 && (
         <Line
           data={{

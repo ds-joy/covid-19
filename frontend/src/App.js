@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import './App.css';
+import "leaflet/dist/leaflet.css";
 
 import Header from './components/Header/Header';
 import Cards from './components/Card/Cards';
 import Map from './components/Map/Map';
+import { sortData, prettyPrintStat } from "./components/util";
 import Chart from './components/Chart/Chart';
 import Graph from './components/Graph/Graph';
-import {sortData} from './components/util';
+
 
 
 import { Card, CardContent, Typography } from "@material-ui/core";
@@ -24,6 +26,12 @@ function App() {
   // for the chart
   const[tableData, setTableData] = useState([]);
 
+  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
+  const [mapCountries, setMapCountries] = useState([]);
+  const [mapZoom, setMapZoom] = useState(3);
+  const [casesType, setCasesType] = useState("cases");
+
+
   // for the dropdown menu which will fetch all the countries
   useEffect( () => {
       const getCountriesData = async () => {
@@ -39,6 +47,7 @@ function App() {
           const sortedData = sortData(data);
           setTableData(sortedData);
           setCountries(countries);
+          setMapCountries(data);
       });
       };
       getCountriesData();
@@ -52,6 +61,9 @@ function App() {
         setCountryInfo(data);
       });
   }, []);
+
+  console.log("mapCountries->")
+  console.log(mapCountries);
 
 
 const onCountrySelect = async (event) => {
@@ -69,12 +81,14 @@ const onCountrySelect = async (event) => {
       .then((response) => response.json())
       .then((data) => {
         setCountryInfo(data);
+        if(countryCode !== "Worldwide") {
+          setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+          setMapZoom(4);
+        }
     });
 }
 
-
-console.log(countries)
-
+ let isRed;
 
  
   return (
@@ -85,22 +99,38 @@ console.log(countries)
         
         <div className="Cards">
           <Cards  
+          isRed = {true} 
+          onClick={(e) => setCasesType("cases")}
           title="Active Cases"  
+          active={casesType === "cases"}
           cases= {countryInfo.todayCases} 
-          total={countryInfo.cases} />
+          total={prettyPrintStat(countryInfo.cases)} />
 
-          <Cards  
+          <Cards
+          isRed = {false} 
+          onClick={(e) => setCasesType("recovered")}
           title="Recovered" 
+          active={casesType === "recovered"}
           cases= {countryInfo.todayRecovered} 
-          total={countryInfo.recovered} />
+          total={prettyPrintStat(countryInfo.recovered)} />
 
           <Cards  
+          isRed = {true}
+          onClick={(e) => setCasesType("deaths")}
           title="Deaths"  
+          active={casesType === "deaths"}
           cases= {countryInfo.todayDeaths} 
-          total= {countryInfo.deaths} />
+          total= {prettyPrintStat(countryInfo.deaths)} />
         </div>
+         
+        <Graph casesType={casesType}/>
 
-        <Map/>
+        <Map
+          countries={mapCountries}
+          casesType={casesType}
+          center={mapCenter}
+          zoom={mapZoom}
+        />
       </div>
 
       <div className="appRight">
@@ -108,7 +138,7 @@ console.log(countries)
           <CardContent>
             <div className="appRightContents">
               <Chart countries={tableData} />
-              <Graph casesType="recovered"/>
+              
             </div>
 
           </CardContent>

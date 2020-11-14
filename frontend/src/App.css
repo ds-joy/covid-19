@@ -10,7 +10,7 @@ body {
 .app {
   display: flex;
   justify-content: space-between;
-  padding:2%;
+  padding:1.5%;
 }
 
 @media (max-width: 800px) {
@@ -20,7 +20,7 @@ body {
 }
 
 .appLeft {
-  flex: 0.85;
+  flex: 0.90;
 }
 
 .Cards {

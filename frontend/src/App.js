@@ -5,46 +5,52 @@ import "leaflet/dist/leaflet.css";
 import Header from './components/Header/Header';
 import Cards from './components/Card/Cards';
 import Map from './components/Map/Map';
-import { sortData, prettyPrintStat } from "./components/util";
 import Chart from './components/Chart/Chart';
 import Graph from './components/Graph/Graph';
 
 
-
+import { sortData, prettyPrintStat } from "./components/util";
 import { Card, CardContent, Typography } from "@material-ui/core";
 
 
 function App() {
 
   // for the dropdown menu
-  const[countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState([]);
   // for the selected country
-  const[country, setCountry] = useState('Worldwide');
+  const [country, setCountry] = useState('Worldwide');
   // info for the cards
-  const[countryInfo, setCountryInfo] = useState({})
+  const [countryInfo, setCountryInfo] = useState({})
 
   // for the chart
-  const[tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [casesType, setCasesType] = useState("cases");
 
+  // for the map
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
   const [mapCountries, setMapCountries] = useState([]);
   const [mapZoom, setMapZoom] = useState(3);
-  const [casesType, setCasesType] = useState("cases");
+  
 
 
   // for the dropdown menu which will fetch all the countries
   useEffect( () => {
+      //this will fetch all the data about the countries 
       const getCountriesData = async () => {
       await fetch("https://disease.sh/v3/covid-19/countries")
       .then((response) => response.json())
       .then((data) => {
+          // setting the country name and code
           const countries = data.map((country) => ({
           name: country.country,
           value:country.countryInfo.iso2,
 
           }));
 
+          // sorts the countries by total cases
           const sortedData = sortData(data);
+          
+          // updating the states
           setTableData(sortedData);
           setCountries(countries);
           setMapCountries(data);
@@ -53,6 +59,7 @@ function App() {
       getCountriesData();
   }, []);
   
+
   // for the initial Worldwide data
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
@@ -62,12 +69,13 @@ function App() {
       });
   }, []);
 
-  console.log("mapCountries->")
-  console.log(mapCountries);
+  // console.log("mapCountries->")
+  // console.log(mapCountries);
 
 
 const onCountrySelect = async (event) => {
   const countryCode = event.target.value;
+  // which country is selected
   setCountry(countryCode);
 
   let url;
@@ -88,6 +96,7 @@ const onCountrySelect = async (event) => {
     });
 }
 
+
  let isRed;
 
  
@@ -97,6 +106,7 @@ const onCountrySelect = async (event) => {
       <div className="appLeft">
         <Header onCountrySelect={onCountrySelect} country={country} countries={countries}/>
         
+        {/* cards components to show the info */}
         <div className="Cards">
           <Cards  
           isRed = {true} 
@@ -126,8 +136,8 @@ const onCountrySelect = async (event) => {
         <Graph casesType={casesType}/>
 
         <Map
-          countries={mapCountries}
-          casesType={casesType}
+          countries={mapCountries} 
+          casesType={casesType} 
           center={mapCenter}
           zoom={mapZoom}
         />
